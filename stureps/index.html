@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="學生自治會推派至國立臺北大學各項會議的學生代表名冊。" />
+    <title>學生代表名冊 — 國立臺北大學學生自治會</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.pumpkin.min.css"
+    />
+
+    <script>
+      // 必須是同步、blocking 的 inline script，跑在畫面繪製前，避免亮暗模式切換時的閃爍(FOUC)
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          if (stored === "light" || stored === "dark") {
+            document.documentElement.setAttribute("data-theme", stored);
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <style>
+      /* Pico classless 預設 header/main/footer 會置中限制寬度，這裡沿用，不額外加 grid 版面 */
+      nav.site-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      #theme-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.4rem 0.6rem;
+        line-height: 0;
+      }
+      details {
+        margin-bottom: 1rem;
+      }
+      details > summary {
+        cursor: pointer;
+      }
+      .badge-ok {
+        color: var(--pico-ins-color);
+      }
+      .badge-warn {
+        color: var(--pico-del-color);
+      }
+      .badge-muted {
+        color: var(--pico-muted-color);
+      }
+      table[role="grid"] {
+        width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <nav class="site-nav">
+        <ul>
+          <li><strong>國立臺北大學學生自治會</strong></li>
+        </ul>
+        <ul>
+          <li><a href="https://ntpusu.org">回會網</a></li>
+          <li>
+            <button
+              id="theme-toggle"
+              class="outline contrast"
+              type="button"
+              aria-label="切換亮暗模式"
+            >
+              <svg
+                id="icon-sun"
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                aria-hidden="true"
+                style="display: none"
+              >
+                <path
+                  fill="currentColor"
+                  d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-6.66l1.41-1.41M4.93 19.07l1.41-1.41m11.32 0l1.41 1.41M4.93 4.93L6.34 6.34M12 7a5 5 0 100 10 5 5 0 000-10z"
+                />
+              </svg>
+              <svg
+                id="icon-moon"
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                aria-hidden="true"
+                style="display: none"
+              >
+                <path
+                  fill="currentColor"
+                  d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
+                />
+              </svg>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <hgroup>
+        <h1>學生代表名冊</h1>
+        <p id="last-updated">最近一次同步時間：載入中...</p>
+      </hgroup>
+
+      <article id="loading-state" style="text-align: center">
+        <progress indeterminate></progress>
+        <p>正在載入資料...</p>
+      </article>
+
+      <article
+        id="error-state"
+        style="display: none; border-color: var(--pico-del-color)"
+      >
+        <header style="color: var(--pico-del-color); font-weight: bold">
+          載入資料時發生錯誤，請稍後再試。
+        </header>
+      </article>
+
+      <article id="empty-state" style="display: none">目前尚無會議資料</article>
+
+      <div id="meetings-list"></div>
+    </main>
+
+    <footer>
+      <small>
+        <a
+          href="https://github.com/ntpusu/ntpusu-info-web"
+          target="_blank"
+          rel="noopener"
+          >Open Source</a
+        >. 國立臺北大學學生自治會總會秘書處建置，資料來源：兩校區學生會。
+      </small>
+    </footer>
+
+    <script>
+      (function () {
+        "use strict";
+
+        // ---------- 主題切換 ----------
+        var toggleBtn = document.getElementById("theme-toggle");
+        var iconSun = document.getElementById("icon-sun");
+        var iconMoon = document.getElementById("icon-moon");
+
+        function currentIsDark() {
+          var attr = document.documentElement.getAttribute("data-theme");
+          if (attr === "dark") return true;
+          if (attr === "light") return false;
+          return window.matchMedia("(prefers-color-scheme: dark)").matches;
+        }
+
+        function syncIcon() {
+          var dark = currentIsDark();
+          iconSun.style.display = dark ? "inline" : "none";
+          iconMoon.style.display = dark ? "none" : "inline";
+        }
+
+        toggleBtn.addEventListener("click", function () {
+          var next = currentIsDark() ? "light" : "dark";
+          document.documentElement.setAttribute("data-theme", next);
+          try {
+            localStorage.setItem("theme", next);
+          } catch (e) {}
+          syncIcon();
+        });
+
+        syncIcon();
+
+        // ---------- 資料抓取（含 1 小時 localStorage 快取，僅限本機瀏覽器） ----------
+        var DATA_URL =
+          "https://cdn.jsdelivr.net/gh/ntpusu/legislative-data@main/data/representatives.json";
+        var CACHE_KEY = "stureps-data-cache";
+        var CACHE_TTL_MS = 60 * 60 * 1000; // 1 小時
+
+        function readCache() {
+          try {
+            var raw = localStorage.getItem(CACHE_KEY);
+            if (!raw) return null;
+            var parsed = JSON.parse(raw);
+            if (Date.now() - parsed.fetchedAt > CACHE_TTL_MS) return null;
+            return parsed.data;
+          } catch (e) {
+            return null;
+          }
+        }
+
+        function writeCache(data) {
+          try {
+            localStorage.setItem(
+              CACHE_KEY,
+              JSON.stringify({ fetchedAt: Date.now(), data: data }),
+            );
+          } catch (e) {
+            // localStorage 滿了或被封鎖時，靜默略過，不影響頁面功能
+          }
+        }
+
+        function formatDate(dateString) {
+          var d = new Date(dateString);
+          return d.toLocaleString("zh-TW", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone: "Asia/Taipei",
+          });
+        }
+
+        function escapeHtml(str) {
+          if (str === null || str === undefined) return "";
+          return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+        }
+
+        // 對應 assignments -> meetings/representatives，用 filter/flatMap，不用 find，
+        // 避免有學代同名時，程式安靜地忽略而漏了資料（根本解法應在資料端處理，前端只保證不漏顯示）
+        function buildMeetingsWithReps(data) {
+          var assignments = data.assignments || [];
+          var representatives = data.representatives || [];
+
+          return (data.meetings || []).map(function (meeting) {
+            var assignedReps = assignments
+              .filter(function (a) {
+                return a.meetingName === meeting.name;
+              })
+              .reduce(function (acc, a) {
+                var matches = representatives.filter(function (r) {
+                  return r.name === a.representativeName;
+                });
+                return acc.concat(matches);
+              }, []);
+            var copy = {};
+            for (var k in meeting) copy[k] = meeting[k];
+            copy.assignedReps = assignedReps;
+            return copy;
+          });
+        }
+
+        function seatBadge(meeting) {
+          var total = Number(meeting.totalSeats);
+          var count = meeting.assignedReps.length;
+          if (!meeting.totalSeats) return "";
+          if (count > 0 && count === total) {
+            return '<span class="badge-ok">已有 ' + count + " 席資料</span>";
+          }
+          if (count > 0) {
+            return '<span class="badge-warn">僅有 ' + count + " 席資料</span>";
+          }
+          return '<span class="badge-warn">無推派資料</span>';
+        }
+
+        function renderMeeting(meeting) {
+          var hasNominationInfo = !!(
+            meeting.regulationArticle ||
+            meeting.seatDistribution ||
+            meeting.sanxiaRegulation ||
+            meeting.sanxiaMethod ||
+            meeting.taipeiRegulation ||
+            meeting.taipeiMethod ||
+            meeting.otherMethod
+          );
+
+          var html = "<details>";
+          html += "<summary><strong>" + escapeHtml(meeting.name) + "</strong>";
+          if (meeting.totalSeats) {
+            html +=
+              ' <span class="badge-muted">（法定 ' +
+              escapeHtml(meeting.totalSeats) +
+              " 席 · " +
+              seatBadge(meeting) +
+              "）</span>";
+          }
+          html += "</summary>";
+
+          // 基本資訊
+          html += "<section><hgroup><h5>基本資訊</h5>";
+          if (meeting.department) {
+            html += "<p><strong>承辦單位：</strong>";
+            if (meeting.departmentLink) {
+              html +=
+                '<a href="' +
+                escapeHtml(meeting.departmentLink) +
+                '" target="_blank" rel="noopener noreferrer">' +
+                escapeHtml(meeting.department) +
+                "</a>";
+            } else {
+              html += escapeHtml(meeting.department);
+            }
+            html += "</p>";
+          }
+          if (meeting.totalSeats) {
+            html +=
+              "<p><strong>本會法定可推派席次：</strong>" +
+              escapeHtml(meeting.totalSeats) +
+              "</p>";
+          }
+          if (meeting.link) {
+            html += "<p><strong>會議資料：</strong>";
+            if (meeting.link !== "non-public") {
+              html +=
+                '<a href="' +
+                escapeHtml(meeting.link) +
+                '" target="_blank" rel="noopener noreferrer">查看會議資料</a>';
+            } else {
+              html += '<span class="badge-muted">非公開</span>';
+            }
+            html += "</p>";
+          }
+          html += "</hgroup></section>";
+
+          // 推派方式
+          if (hasNominationInfo) {
+            html += "<section><hgroup><h5>推派方式</h5>";
+            if (meeting.regulationArticle) {
+              html +=
+                "<p><strong>依據：</strong>本會學代推派辦法" +
+                escapeHtml(meeting.regulationArticle) +
+                "</p>";
+            }
+            if (meeting.seatDistribution) {
+              html +=
+                "<p><strong>席次分配：</strong>" +
+                escapeHtml(meeting.seatDistribution) +
+                "</p>";
+            }
+            if (meeting.sanxiaRegulation || meeting.sanxiaMethod) {
+              html +=
+                '<div><strong>三峽校區：</strong><div style="margin-left:1rem">';
+              if (meeting.sanxiaRegulation)
+                html +=
+                  "<div>依據：三峽學代推派條例" +
+                  escapeHtml(meeting.sanxiaRegulation) +
+                  "</div>";
+              if (meeting.sanxiaMethod)
+                html +=
+                  "<div>推派方式：" +
+                  escapeHtml(meeting.sanxiaMethod) +
+                  "</div>";
+              html += "</div></div>";
+            }
+            if (meeting.taipeiRegulation || meeting.taipeiMethod) {
+              html +=
+                '<div><strong>臺北校區：</strong><div style="margin-left:1rem">';
+              if (meeting.taipeiRegulation)
+                html +=
+                  "<div>依據：臺北學代推派條例" +
+                  escapeHtml(meeting.taipeiRegulation) +
+                  "</div>";
+              if (meeting.taipeiMethod)
+                html +=
+                  "<div>推派方式：" +
+                  escapeHtml(meeting.taipeiMethod) +
+                  "</div>";
+              html += "</div></div>";
+            }
+            if (meeting.otherMethod) {
+              html +=
+                "<p><strong>其他推派方式：</strong>" +
+                escapeHtml(meeting.otherMethod) +
+                "</p>";
+            }
+            html += "</hgroup></section>";
+          }
+
+          // 學生代表
+          html += "<section><hgroup><h5>學生代表</h5></hgroup>";
+          if (meeting.assignedReps.length > 0) {
+            html +=
+              '<div style="overflow-x:auto"><table role="grid"><thead><tr><th scope="col">姓名</th><th scope="col">職稱</th><th scope="col">系級</th></tr></thead><tbody>';
+            meeting.assignedReps.forEach(function (rep) {
+              html +=
+                "<tr><td>" +
+                escapeHtml(rep.name) +
+                "</td><td>" +
+                escapeHtml(rep.title || "-") +
+                "</td><td>" +
+                escapeHtml(rep.department || "-") +
+                "</td></tr>";
+            });
+            html += "</tbody></table></div>";
+          } else {
+            html += '<p class="badge-muted">目前尚無學生代表資料</p>';
+          }
+          html += "</section>";
+
+          // 備註
+          if (meeting.note) {
+            html +=
+              '<section><hgroup><h6>備註</h6><p style="white-space:pre-wrap">' +
+              escapeHtml(meeting.note) +
+              "</p></hgroup></section>";
+          }
+
+          html += "</details>";
+          return html;
+        }
+
+        function render(data) {
+          document.getElementById("loading-state").style.display = "none";
+          document.getElementById("last-updated").textContent =
+            "最近一次同步時間：" + formatDate(data.lastUpdated);
+
+          var meetings = buildMeetingsWithReps(data);
+          var listEl = document.getElementById("meetings-list");
+
+          if (meetings.length === 0) {
+            document.getElementById("empty-state").style.display = "block";
+            return;
+          }
+
+          listEl.innerHTML = meetings.map(renderMeeting).join("");
+        }
+
+        function showError() {
+          document.getElementById("loading-state").style.display = "none";
+          document.getElementById("error-state").style.display = "block";
+          document.getElementById("last-updated").textContent = "";
+        }
+
+        function load() {
+          var cached = readCache();
+          if (cached) {
+            render(cached);
+            return;
+          }
+          fetch(DATA_URL)
+            .then(function (res) {
+              if (!res.ok) throw new Error("HTTP " + res.status);
+              return res.json();
+            })
+            .then(function (data) {
+              writeCache(data);
+              render(data);
+            })
+            .catch(function (err) {
+              console.error("讀取學生代表資料失敗：", err);
+              showError();
+            });
+        }
+
+        load();
+      })();
+    </script>
+  </body>
+</html>
