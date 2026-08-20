@@ -1,16 +1,10 @@
 # 臺北大學學生會 資訊公開專區
 
-[本會網站](https://ntpusu.org)將遷至 RPage, 若干資料受限於該平台的彈性，無法以簡便的方式維護，因此另建資訊公開專區網站，網址為 https://ntpusu.github.io/ntpusu-info-web/ ，呈現該等資料。
+[本會網站](https://ntpusu.ntpu.edu.tw)已遷至 RPage, 若干資料受限於該平台的彈性，無法以簡便的方式維護，因此另建資訊公開專區網站，網址為 https://ntpusu.github.io/ntpusu-info-web/ ，呈現該等資料。
 
 ## 提供資料
 
-### 目前提供
-
 - [學生代表名冊](https://ntpusu.github.io/ntpusu-info-web/stureps)。
-
-### 未來規劃提供
-
-- [法規資料庫](https://ntpusu.github.io/ntpusu-info-web/regulations)
 
 ## Tech Stack
 
