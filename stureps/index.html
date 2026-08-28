@@ -13,7 +13,7 @@
     />
 
     <script>
-      // 必須是同步、blocking 的 inline script，跑在畫面繪製前，避免亮暗模式切換時的閃爍(FOUC)
+      // 以同步、blocking 的 inline script 跑在畫面繪製前，避免亮暗模式切換時的閃爍(FOUC)
       (function () {
         try {
           var stored = localStorage.getItem("theme");
@@ -68,7 +68,7 @@
           <li><strong>國立臺北大學學生自治會</strong></li>
         </ul>
         <ul>
-          <li><a href="https://ntpusu.org">回會網</a></li>
+          <li><a href="https://ntpusu.ntpu.edu.tw/?Lang=zh-tw">回會網</a></li>
           <li>
             <button
               id="theme-toggle"
