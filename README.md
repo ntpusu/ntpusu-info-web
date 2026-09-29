@@ -5,6 +5,7 @@
 ## 提供資料
 
 - [學生代表名冊](https://ntpusu.github.io/ntpusu-info-web/stureps)。
+- [電子布告欄](https://ntpusu.github.io/ntpusu-info-web/bulletin-board)。
 
 ## Tech Stack
 
@@ -13,3 +14,5 @@
 ## 資料儲存
 
 本專區的資料，為了與本會其它雲端服務專案共用，儲存在專屬的資料儲存庫 [ntpusu/legislative-data](https://github.com/ntpusu/legislative-data)。
+
+電子布告欄嵌入的資料，則是各單位 Google Drive 資料夾。
