@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="臺北大學學生會關於學生自治事項的布告欄。" />
+    <title>學生自治布告欄 — 國立臺北大學學生自治會</title>
+
+    <link rel="shortcut icon" href="https://ntpusu.ntpu.edu.tw/var/file/15/1015/msys_1015_7477194_57479.ico" type="image/x-icon" />
+    <link rel="icon" href="https://ntpusu.ntpu.edu.tw/var/file/15/1015/msys_1015_7477194_57479.ico" type="image/x-icon" />
+    <link rel="bookmark" href="https://ntpusu.ntpu.edu.tw/var/file/15/1015/msys_1015_7477194_57479.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon-precomposed" href="https://ntpusu.ntpu.edu.tw/var/file/15/1015/msys_1015_7477194_57479.ico" />
+    <link rel="apple-touch-icon" href="https://ntpusu.ntpu.edu.tw/var/file/15/1015/msys_1015_7477194_57479.ico" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.pumpkin.min.css"
+    />
+
+    <script>
+      // 以同步、blocking 的 inline script 跑在畫面繪製前，避免亮暗模式切換時的閃爍(FOUC)
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          if (stored === "light" || stored === "dark") {
+            document.documentElement.setAttribute("data-theme", stored);
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <style>
+      /* Pico classless 預設 header/main/footer 會置中限制寬度，這裡沿用，不額外加 grid 版面 */
+      nav.site-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      #theme-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.4rem 0.6rem;
+        line-height: 0;
+      }
+      details {
+        margin-bottom: 1rem;
+      }
+      details > summary {
+        cursor: pointer;
+      }
+      .badge-ok {
+        color: var(--pico-ins-color);
+      }
+      .badge-warn {
+        color: var(--pico-del-color);
+      }
+      .badge-muted {
+        color: var(--pico-muted-color);
+      }
+      table[role="grid"] {
+        width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <nav class="site-nav">
+        <ul>
+          <li><strong>國立臺北大學學生自治會</strong></li>
+        </ul>
+        <ul>
+          <li><a href="https://ntpusu.ntpu.edu.tw/?Lang=zh-tw">回會網</a></li>
+          <li>
+            <button
+              id="theme-toggle"
+              class="outline contrast"
+              type="button"
+              aria-label="切換亮暗模式"
+            >
+              <svg
+                id="icon-sun"
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                aria-hidden="true"
+                style="display: none"
+              >
+                <path
+                  fill="currentColor"
+                  d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-6.66l1.41-1.41M4.93 19.07l1.41-1.41m11.32 0l1.41 1.41M4.93 4.93L6.34 6.34M12 7a5 5 0 100 10 5 5 0 000-10z"
+                />
+              </svg>
+              <svg
+                id="icon-moon"
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                aria-hidden="true"
+                style="display: none"
+              >
+                <path
+                  fill="currentColor"
+                  d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
+                />
+              </svg>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <hgroup>
+        <h1>布告欄</h1>
+        <p>臺北大學學生會的正式文件，可以在這裡查詢。<br />截至114學年度為止，共有總會、三峽校區學生會及三峽校區學生議會透過這個管道公開相關資料。</p>
+      </hgroup>
+
+      <!--  -->
+	  <article>
+        <header>總會 (跨校區)</header>
+        <div style="display: block; height: 300px; width: 100%; max-width: 800px;">
+		  <iframe width="100%" height="300px" title="Google Drive 嵌入" src="https://drive.google.com/embeddedfolderview?id=16ZprtauaEnlex-Any-_W59ZR7Z3_OzPv#list">檔案讀取中&#8230;</iframe>
+	    </div><!-- 原使用 grid mode, 1130730 通知改 list mode -->
+        <p class="wp-block-paragraph">如無法顯示請前往：<a href="https://drive.google.com/drive/folders/16ZprtauaEnlex-Any-_W59ZR7Z3_OzPv" data-type="link" data-id="https://drive.google.com/drive/folders/16ZprtauaEnlex-Any-_W59ZR7Z3_OzPv" target="_blank" rel="noreferrer noopener">原始資料位置</a> (Google Drive)</p>
+      </article>
+
+      <!--  -->
+	  <article>
+        <header>三峽校區學生會</header>
+        <div style="display: block; height: 300px; width: 100%; max-width: 800px;">
+		  <iframe width="100%" height="300px" title="Google Drive 嵌入" src="https://drive.google.com/embeddedfolderview?id=116M3za4MeJ-CAmVg-gQN-Sb2CNQX6xti#list">檔案讀取中&#8230;</iframe>
+	    </div>
+        <p class="wp-block-paragraph">如無法顯示請前往：<a href="https://drive.google.com/drive/folders/116M3za4MeJ-CAmVg-gQN-Sb2CNQX6xti" data-type="link" data-id="https://drive.google.com/drive/folders/116M3za4MeJ-CAmVg-gQN-Sb2CNQX6xti" target="_blank" rel="noreferrer noopener">原始資料位置</a> (Google Drive)</p>
+      </article>
+
+      <!--  -->
+	  <article>
+        <header>三峽校區學生議會</header>
+        <div style="display: block; height: 300px; width: 100%; max-width: 800px;">
+		  <iframe width="100%" height="300px" title="Google Drive 嵌入" src="https://drive.google.com/embeddedfolderview?id=1J4r5ILqCzGMsJF4thDNqbTz2lmEOyVLW#list">檔案讀取中&#8230;</iframe>
+	    </div>
+      </article>
+	  
+    </main>
+
+    <footer>
+      <small>
+        <a
+          href="https://github.com/ntpusu/ntpusu-info-web"
+          target="_blank"
+          rel="noopener"
+          >Open Source</a
+        >. 國立臺北大學學生自治會第4屆總會秘書處建置，資料來源：本會各部門單位。
+      </small>
+    </footer>
+
+    <script>
+      (function () {
+        "use strict";
+
+        // ---------- 主題切換 ----------
+        var toggleBtn = document.getElementById("theme-toggle");
+        var iconSun = document.getElementById("icon-sun");
+        var iconMoon = document.getElementById("icon-moon");
+
+        function currentIsDark() {
+          var attr = document.documentElement.getAttribute("data-theme");
+          if (attr === "dark") return true;
+          if (attr === "light") return false;
+          return window.matchMedia("(prefers-color-scheme: dark)").matches;
+        }
+
+        function syncIcon() {
+          var dark = currentIsDark();
+          iconSun.style.display = dark ? "inline" : "none";
+          iconMoon.style.display = dark ? "none" : "inline";
+        }
+
+        toggleBtn.addEventListener("click", function () {
+          var next = currentIsDark() ? "light" : "dark";
+          document.documentElement.setAttribute("data-theme", next);
+          try {
+            localStorage.setItem("theme", next);
+          } catch (e) {}
+          syncIcon();
+        });
+
+        syncIcon();
+      })();
+    </script>
+  </body>
+</html>
