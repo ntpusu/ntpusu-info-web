@@ -7,8 +7,14 @@ const dataPages = PAGES.filter((p) => ["/stureps/", "/bulletin-board/"].includes
 
 <Layout path="/">
   <hgroup>
-    <h1>{SITE.orgName}<br />{SITE.name}</h1>
-    <p><a href={SITE.orgUrl}>本會網站</a>已遷至 RPage，若干資料受限於該平台的彈性，無法以簡便的方式維護，因此另建本專區，集中呈現這些資料。</p>
+    <h1>
+      {SITE.orgName}
+      <br />
+      {SITE.name}
+    </h1>
+    <p>
+      集中公告<a href={SITE.orgUrl}>本會 RPage 主網站</a>呈現彈性受限的資料。
+    </p>
   </hgroup>
 
   <section aria-labelledby="data-heading">
@@ -27,14 +33,8 @@ const dataPages = PAGES.filter((p) => ["/stureps/", "/bulletin-board/"].includes
     </div>
   </section>
 
-  <section aria-labelledby="source-heading">
-    <h2 id="source-heading">資料來源與更新</h2>
-    <p>學生代表名冊的資料儲存於資料儲存庫 <a href="https://github.com/ntpusu/legislative-data">ntpusu/legislative-data</a>，與本會其他雲端服務共用，開啟頁面時即時載入，不需等待網站重新發布。</p>
-    <p>學生自治布告欄嵌入的資料，則是各單位的 Google Drive 資料夾。</p>
-  </section>
-
   <section aria-labelledby="a11y-heading">
-    <h2 id="a11y-heading">無障礙</h2>
+    <h2 id="a11y-heading">無障礙設計</h2>
     <p>
       本站以 WCAG 2.2 AAA
       為設計目標，提供定位點（:::）、跳到主要內容連結與亮暗模式。各區塊代號與快速鍵請見
