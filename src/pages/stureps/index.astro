@@ -1,0 +1,46 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout path="/stureps/">
+  <hgroup>
+    <h1>學生代表名冊</h1>
+    <p>臺北大學學生會推派至國立臺北大學各項會議的學生代表名冊。</p>
+    <p id="last-updated" class="muted">最近一次同步時間：載入中…</p>
+  </hgroup>
+
+  <article id="loading-state" aria-busy="true">
+    <progress aria-label="正在載入資料"></progress>
+    <p>正在載入資料…</p>
+  </article>
+
+  <article id="error-state" role="alert" hidden>
+    <header>載入資料時發生錯誤</header>
+    <p>請檢查網路連線後再試一次。</p>
+    <button id="retry-button" type="button">重新載入</button>
+  </article>
+
+  <article id="empty-state" hidden>目前尚無會議資料。</article>
+
+  <search id="tools" class="toolbar" hidden>
+    <div class="field">
+      <label for="query">搜尋會議、承辦單位或學生代表</label>
+      <input id="query" type="search" autocomplete="off" />
+    </div>
+    <div class="actions">
+      <button id="expand-all" type="button" class="outline">全部展開</button>
+      <button id="collapse-all" type="button" class="outline">全部收合</button>
+    </div>
+  </search>
+
+  <p id="result-status" role="status" class="muted"></p>
+
+  <section aria-labelledby="meetings-heading">
+    <h2 id="meetings-heading" class="sr-only">會議列表</h2>
+    <div id="meetings-list"></div>
+  </section>
+</Layout>
+
+<script>
+  import "../../scripts/stureps";
+</script>
