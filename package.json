@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@12.21.0",
-  "description": "臺北大學學生會資訊公開專區",
+  "description": "Public Information Portal of NTPUSU.",
   "license": "MIT",
   "scripts": {
     "dev": "astro dev",
