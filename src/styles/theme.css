@@ -1,0 +1,114 @@
+/*
+ * 主題：以 Blades（Pico CSS 的接班版）為底，覆寫為棕色色階。
+ * 目標為 WCAG 2.2 AAA：一般文字對比 ≥ 7:1，非文字元件 ≥ 3:1。
+ * 對比以 scripts/check-contrast.mjs 驗證，修改顏色後請執行 `pnpm check:contrast`。
+ *
+ * 寫法與 Blades 一致：light-dark() 放在 :root 與 [data-theme] 上。
+ * 禁止在文字下使用 brown-400 以下（淺）或 brown-600 以上（深）的底色，
+ * 否則會掉到 7:1 以下。
+ */
+
+:root,
+[data-theme="light"],
+[data-theme="dark"] {
+  /* ---- 棕色色階（品牌色） ---- */
+  --brown-50: #fef5ef;
+  --brown-100: #f2e9e4;
+  --brown-200: #e0d7d2;
+  --brown-300: #c9bfb8;
+  --brown-400: #aea29a;
+  --brown-500: #94867d;
+  --brown-600: #7b6b61;
+  --brown-700: #66564b;
+  --brown-800: #554439;
+  --brown-900: #3f3127;
+  --brown-950: #2c2018;
+
+  /* ---- 語意色（皆搭配文字或圖示，不單靠顏色傳達） ---- */
+  --ok: light-dark(#14532d, #bbf7d0);
+  --warn: light-dark(#7c2d12, #fde68a);
+  --danger: light-dark(#7f1d1d, #fecaca);
+
+  /* ---- 表面 ---- */
+  --pico-background-color: light-dark(var(--brown-50), var(--brown-950));
+  --pico-card-background-color: light-dark(#fff, var(--brown-900));
+  --pico-card-sectioning-background-color: light-dark(var(--brown-100), var(--brown-950));
+  --pico-card-border-color: light-dark(var(--brown-300), var(--brown-700));
+  --pico-muted-border-color: light-dark(var(--brown-300), var(--brown-700));
+  --pico-table-border-color: light-dark(var(--brown-300), var(--brown-700));
+  --pico-table-row-stripped-background-color: light-dark(var(--brown-50), var(--brown-950));
+  --pico-code-background-color: light-dark(var(--brown-100), var(--brown-950));
+  --pico-code-color: var(--pico-color);
+
+  /* ---- 文字 ---- */
+  --pico-color: light-dark(var(--brown-950), var(--brown-100));
+  --pico-muted-color: light-dark(var(--brown-800), var(--brown-200));
+  --pico-h1-color: var(--pico-color);
+  --pico-h2-color: var(--pico-color);
+  --pico-h3-color: var(--pico-color);
+  --pico-h4-color: var(--pico-color);
+  --pico-h5-color: var(--pico-color);
+  --pico-h6-color: var(--pico-muted-color);
+  --pico-ins-color: var(--ok);
+  --pico-del-color: var(--danger);
+  --pico-mark-background-color: light-dark(var(--brown-200), var(--brown-800));
+  --pico-mark-color: light-dark(var(--brown-950), var(--brown-50));
+  --pico-text-selection-color: light-dark(rgb(102 86 75 / 0.3), rgb(201 191 184 / 0.4));
+
+  /* ---- 連結與主色 ---- */
+  --pico-primary: light-dark(var(--brown-800), var(--brown-200));
+  --pico-primary-underline: var(--pico-primary);
+  --pico-primary-hover: light-dark(var(--brown-950), var(--brown-50));
+  --pico-primary-hover-underline: var(--pico-primary-hover);
+  --pico-primary-focus: var(--focus-ring);
+  --pico-primary-background: light-dark(var(--brown-800), var(--brown-200));
+  --pico-primary-border: var(--pico-primary-background);
+  --pico-primary-hover-background: light-dark(var(--brown-950), var(--brown-50));
+  --pico-primary-hover-border: var(--pico-primary-hover-background);
+  --pico-primary-inverse: light-dark(var(--brown-50), var(--brown-950));
+
+  /* 本站不使用 secondary / contrast 變體，一律對應到主色或文字色，避免掉到 7:1 以下 */
+  --pico-secondary: var(--pico-muted-color);
+  --pico-secondary-underline: var(--pico-muted-color);
+  --pico-secondary-hover: var(--pico-primary-hover);
+  --pico-secondary-hover-underline: var(--pico-primary-hover);
+  --pico-secondary-background: var(--pico-primary-background);
+  --pico-secondary-border: var(--pico-primary-border);
+  --pico-secondary-hover-background: var(--pico-primary-hover-background);
+  --pico-secondary-hover-border: var(--pico-primary-hover-border);
+  --pico-secondary-inverse: var(--pico-primary-inverse);
+  --pico-secondary-focus: var(--focus-ring);
+  --pico-contrast: var(--pico-color);
+  --pico-contrast-underline: var(--pico-color);
+  --pico-contrast-hover: var(--pico-primary-hover);
+  --pico-contrast-hover-underline: var(--pico-primary-hover);
+  --pico-contrast-background: var(--pico-primary-background);
+  --pico-contrast-border: var(--pico-primary-border);
+  --pico-contrast-hover-background: var(--pico-primary-hover-background);
+  --pico-contrast-hover-border: var(--pico-primary-hover-border);
+  --pico-contrast-inverse: var(--pico-primary-inverse);
+  --pico-contrast-focus: var(--focus-ring);
+
+  /* ---- 表單元件（邊框為非文字元件，需 ≥ 3:1） ---- */
+  --pico-form-element-background-color: light-dark(#fff, var(--brown-900));
+  --pico-form-element-border-color: light-dark(var(--brown-600), var(--brown-400));
+  --pico-form-element-color: var(--pico-color);
+  --pico-form-element-placeholder-color: var(--pico-muted-color);
+  --pico-form-element-active-background-color: var(--pico-form-element-background-color);
+  --pico-form-element-active-border-color: var(--pico-color);
+  --pico-form-element-focus-color: var(--focus-ring);
+  --pico-form-element-selected-background-color: light-dark(var(--brown-100), var(--brown-800));
+  --pico-form-element-disabled-opacity: 1;
+
+  /* ---- 焦點外框（WCAG 2.4.13：≥ 2 CSS px、對比 ≥ 3:1） ---- */
+  --focus-ring: light-dark(var(--brown-950), var(--brown-50));
+
+  /* ---- 字體與間距 ---- */
+  --pico-font-family:
+    system-ui, -apple-system, "Segoe UI", "Noto Sans TC", "PingFang TC",
+    "Microsoft JhengHei", "Heiti TC", sans-serif;
+  /* 中文行高偏大較易閱讀（1.4.8 要求至少 1.5） */
+  --pico-line-height: 1.75;
+  --pico-box-shadow: none;
+  --target-size: 2.75rem; /* 44 CSS px，2.5.5 目標尺寸 */
+}
