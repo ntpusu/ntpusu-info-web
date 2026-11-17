@@ -35,6 +35,11 @@ const dataPages = PAGES.filter((p) => ["/stureps/", "/bulletin-board/"].includes
 
   <section aria-labelledby="a11y-heading">
     <h2 id="a11y-heading">無障礙</h2>
-    <p>本站以 WCAG 2.2 AAA 為設計目標，提供定位點（:::）、跳到主要內容連結與亮暗模式。各區塊代號與快速鍵請見<a href={href("/sitemap/")}>網站導覽</a>。若遇到閱讀或操作上的困難，歡迎至 <a href={`${SITE.repoUrl}/issues`}>GitHub 議題</a>回報。</p>
+    <p>
+      本站以 WCAG 2.2 AAA
+      為設計目標，提供定位點（:::）、跳到主要內容連結與亮暗模式。各區塊代號與快速鍵請見
+      <a href={href("/sitemap/")}>網站導覽</a>。若遇到閱讀或操作上的困難，歡迎至{" "}
+      <a href={`${SITE.repoUrl}/issues`}>GitHub 開設議題</a>來回報。
+    </p>
   </section>
 </Layout>
