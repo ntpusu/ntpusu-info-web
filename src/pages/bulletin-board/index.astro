@@ -1,0 +1,36 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+// 各單位的 Google Drive 資料夾。新增單位只需在此加一筆。
+// 嵌入網址原使用 grid mode，113/07/30 通知改為 list mode（#list）。
+const units = [
+  { name: "總會（跨校區）", id: "16ZprtauaEnlex-Any-_W59ZR7Z3_OzPv" },
+  { name: "三峽校區學生會", id: "116M3za4MeJ-CAmVg-gQN-Sb2CNQX6xti" },
+  { name: "三峽校區學生議會", id: "1J4r5ILqCzGMsJF4thDNqbTz2lmEOyVLW" },
+];
+---
+
+<Layout path="/bulletin-board/">
+  <hgroup>
+    <h1>學生自治布告欄</h1>
+    <p>臺北大學學生會的正式文件，可以在這裡查詢。截至 114 學年度為止，共有總會、三峽校區學生會及三峽校區學生議會透過這個管道公開相關資料。</p>
+  </hgroup>
+
+  {
+    units.map((u) => (
+      <section aria-labelledby={`unit-${u.id}`}>
+        <h2 id={`unit-${u.id}`}>{u.name}</h2>
+        <p><a href={`https://drive.google.com/drive/folders/${u.id}`}>前往{u.name}的 Google Drive 資料夾</a>（下方嵌入畫面無法顯示時請使用此連結）</p>
+        <iframe
+          class="drive-frame"
+          title={`${u.name}的 Google Drive 資料夾`}
+          src={`https://drive.google.com/embeddedfolderview?id=${u.id}#list`}
+          loading="lazy"
+          referrerpolicy="no-referrer"
+        >
+          檔案讀取中…
+        </iframe>
+      </section>
+    ))
+  }
+</Layout>

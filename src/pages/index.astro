@@ -1,0 +1,40 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { PAGES, SITE, href } from "../lib/site";
+
+const dataPages = PAGES.filter((p) => ["/stureps/", "/bulletin-board/"].includes(p.path));
+---
+
+<Layout path="/">
+  <hgroup>
+    <h1>{SITE.orgName}<br />{SITE.name}</h1>
+    <p><a href={SITE.orgUrl}>本會網站</a>已遷至 RPage，若干資料受限於該平台的彈性，無法以簡便的方式維護，因此另建本專區，集中呈現這些資料。</p>
+  </hgroup>
+
+  <section aria-labelledby="data-heading">
+    <h2 id="data-heading">提供資料</h2>
+    <div class="card-grid">
+      {
+        dataPages.map((p) => (
+          <article>
+            <h3>
+              <a href={href(p.path)}>{p.title}</a>
+            </h3>
+            <p>{p.description}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section aria-labelledby="source-heading">
+    <h2 id="source-heading">資料來源與更新</h2>
+    <p>學生代表名冊的資料儲存於資料儲存庫 <a href="https://github.com/ntpusu/legislative-data">ntpusu/legislative-data</a>，與本會其他雲端服務共用，開啟頁面時即時載入，不需等待網站重新發布。</p>
+    <p>學生自治布告欄嵌入的資料，則是各單位的 Google Drive 資料夾。</p>
+  </section>
+
+  <section aria-labelledby="a11y-heading">
+    <h2 id="a11y-heading">無障礙</h2>
+    <p>本站以 WCAG 2.2 AAA 為設計目標，提供定位點（:::）、跳到主要內容連結與亮暗模式。各區塊代號與快速鍵請見<a href={href("/sitemap/")}>網站導覽</a>。若遇到閱讀或操作上的困難，歡迎至 <a href={`${SITE.repoUrl}/issues`}>GitHub 議題</a>回報。</p>
+  </section>
+</Layout>

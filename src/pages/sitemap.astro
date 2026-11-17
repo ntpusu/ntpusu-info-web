@@ -1,0 +1,61 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { PAGES, SITE, href } from "../lib/site";
+---
+
+<Layout path="/sitemap/">
+  <hgroup>
+    <h1>網站導覽</h1>
+    <p>本站所有頁面、區塊代號與快速鍵說明。</p>
+  </hgroup>
+
+  <section aria-labelledby="pages-heading">
+    <h2 id="pages-heading">頁面一覽</h2>
+    <ul>
+      {
+        PAGES.map((p) => (
+          <li>
+            <a href={href(p.path)}>{p.title}</a>：{p.description}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="external-heading">
+    <h2 id="external-heading">相關外部網站</h2>
+    <ul>
+      <li><a href={SITE.orgUrl}>本會網站</a>（RPage）</li>
+      <li><a href={SITE.repoUrl}>本站原始碼</a>（GitHub）</li>
+      <li><a href="https://github.com/ntpusu/legislative-data">資料儲存庫</a>（GitHub）</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="landmark-heading">
+    <h2 id="landmark-heading">區塊代號與快速鍵</h2>
+    <p>每個頁面皆以「:::」標示區塊起點，可用 Tab 鍵移動到該符號，或使用下列快速鍵直接跳到對應區塊。</p>
+    <table>
+      <caption>頁面區塊與快速鍵</caption>
+      <thead>
+        <tr><th scope="col">代號</th><th scope="col">區塊</th><th scope="col">快速鍵</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>:::U</td><td>上方功能區塊（網站名稱、導覽列、麵包屑）</td><td><kbd>U</kbd></td></tr>
+        <tr><td>:::C</td><td>主要內容區塊</td><td><kbd>C</kbd></td></tr>
+        <tr><td>:::B</td><td>下方功能區塊（頁尾連結）</td><td><kbd>B</kbd></td></tr>
+      </tbody>
+    </table>
+    <p>快速鍵需搭配瀏覽器的組合鍵使用：</p>
+    <table>
+      <caption>各瀏覽器的組合鍵</caption>
+      <thead>
+        <tr><th scope="col">瀏覽器</th><th scope="col">組合鍵</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Windows 上的 Chrome、Edge</td><td><kbd>Alt</kbd> + 代號</td></tr>
+        <tr><td>Windows 上的 Firefox</td><td><kbd>Alt</kbd> + <kbd>Shift</kbd> + 代號</td></tr>
+        <tr><td>macOS 上的 Chrome、Safari、Firefox</td><td><kbd>Control</kbd> + <kbd>Option</kbd> + 代號</td></tr>
+      </tbody>
+    </table>
+  </section>
+</Layout>
