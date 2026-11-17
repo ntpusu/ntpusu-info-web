@@ -1,0 +1,27 @@
+---
+import { PAGES, getPage, href } from "../lib/site";
+
+interface Props {
+  path: string;
+}
+const { path } = Astro.props;
+const home = PAGES[0]!;
+const current = getPage(path);
+---
+
+{
+  path !== "/" && (
+    <nav aria-label="麵包屑" class="breadcrumb">
+      <ol>
+        <li>
+          <a href={href(home.path)}>{home.title}</a>
+        </li>
+        <li>
+          <a href={href(current.path)} aria-current="page">
+            {current.title}
+          </a>
+        </li>
+      </ol>
+    </nav>
+  )
+}

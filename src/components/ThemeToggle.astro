@@ -1,0 +1,53 @@
+---
+// 亮暗模式切換。標籤固定、以 aria-pressed 表示狀態；
+// 沒有 JavaScript 時整顆按鈕隱藏，頁面改依系統偏好顯示。
+---
+
+<button id="theme-toggle" class="outline" type="button" aria-pressed="false" hidden>
+  <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+    <path
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-6.66l1.41-1.41M4.93 19.07l1.41-1.41m11.32 0l1.41 1.41M4.93 4.93L6.34 6.34M12 7a5 5 0 100 10 5 5 0 000-10z"
+    ></path>
+  </svg>
+  <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+  </svg>
+  <span>深色模式</span>
+</button>
+
+<script>
+  const btn = document.getElementById("theme-toggle") as HTMLButtonElement;
+  const root = document.documentElement;
+  const isDark = () => root.getAttribute("data-theme") === "dark";
+
+  function sync() {
+    btn.setAttribute("aria-pressed", String(isDark()));
+  }
+
+  btn.hidden = false;
+  sync();
+
+  btn.addEventListener("click", () => {
+    const next = isDark() ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try {
+      localStorage.setItem("theme", next);
+    } catch {}
+    sync();
+  });
+
+  // 使用者未手動選擇時，跟隨系統偏好的即時變化
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+    let stored: string | null = null;
+    try {
+      stored = localStorage.getItem("theme");
+    } catch {}
+    if (stored === "light" || stored === "dark") return;
+    root.setAttribute("data-theme", e.matches ? "dark" : "light");
+    sync();
+  });
+</script>

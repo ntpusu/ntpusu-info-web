@@ -1,0 +1,315 @@
+/* 全站版面與無障礙樣式。色彩一律引用 theme.css 的變數。 */
+
+/* ---------- 基礎 ---------- */
+body {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100dvh;
+}
+main {
+  flex: 1;
+  padding-block: 1rem 3rem;
+}
+
+/* 1.4.8：行寬不超過 80 字元（中文約 40 字） */
+main p,
+main li,
+main dd {
+  max-inline-size: 40em;
+}
+main td p,
+main td li {
+  max-inline-size: none;
+}
+
+.muted {
+  color: var(--pico-muted-color);
+}
+.pre-wrap {
+  white-space: pre-wrap;
+}
+.sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- 焦點（2.4.7、2.4.13） ---------- */
+:where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+/* ---------- 跳過連結與定位點（:::） ---------- */
+.skip-link {
+  position: absolute;
+  inset-inline-start: 0.5rem;
+  inset-block-start: -10rem;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--target-size);
+  padding-inline: 1rem;
+  background: var(--pico-card-background-color);
+  border: 2px solid var(--focus-ring);
+}
+.skip-link:focus {
+  inset-block-start: 0.5rem;
+}
+
+/* 臺灣無障礙規範的定位點：永遠可見，點擊範圍 44px */
+a.landmark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--target-size);
+  min-block-size: var(--target-size);
+  color: var(--pico-muted-color);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+}
+a.landmark:hover {
+  color: var(--pico-primary-hover);
+  text-decoration: underline;
+}
+
+/* ---------- 頁首與導覽 ---------- */
+.site-header {
+  padding-block: 0.5rem 0;
+}
+.header-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.site-nav {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 1rem;
+  margin: 0;
+}
+.site-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.site-nav li {
+  margin: 0;
+  padding: 0;
+  max-inline-size: none;
+}
+.site-nav a,
+.site-footer a:not(.landmark),
+.breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--target-size);
+  margin: 0;
+  padding-inline: 0.75rem;
+}
+.site-nav a[aria-current="page"] {
+  font-weight: 700;
+  text-decoration-thickness: 3px;
+}
+.brand {
+  padding-inline-start: 0;
+}
+
+#theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: var(--target-size);
+  margin: 0;
+  padding: 0 0.75rem;
+  white-space: nowrap;
+}
+#theme-toggle[hidden] {
+  display: none;
+}
+#theme-toggle .icon-sun,
+#theme-toggle .icon-moon {
+  display: none;
+}
+[data-theme="dark"] #theme-toggle .icon-sun,
+[data-theme="light"] #theme-toggle .icon-moon {
+  display: inline;
+}
+
+/* ---------- 麵包屑 ---------- */
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.breadcrumb li {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+.breadcrumb li + li::before {
+  content: "/" / "";
+  color: var(--pico-muted-color);
+}
+.breadcrumb a {
+  padding-inline: 0.5rem;
+}
+.breadcrumb li:first-child a {
+  padding-inline-start: 0;
+}
+
+/* ---------- 頁尾 ---------- */
+.site-footer {
+  padding-block: 1rem 2rem;
+  border-block-start: 1px solid var(--pico-muted-border-color);
+}
+.site-footer nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.site-footer nav li {
+  margin: 0;
+  padding: 0;
+}
+.site-footer p {
+  margin: 0;
+  color: var(--pico-muted-color);
+}
+
+/* ---------- 內容 ---------- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 1rem;
+}
+.card-grid article {
+  margin: 0;
+}
+.card-grid h3 {
+  margin-block-end: 0.5rem;
+}
+/* 整張卡片以標題連結為唯一連結，避免「閱讀更多」類重複連結 */
+.card-grid h3 a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--target-size);
+}
+
+dl {
+  margin-block: 0 1rem;
+}
+dt {
+  font-weight: 700;
+}
+dd {
+  margin-inline: 0 0 0.5rem;
+}
+dl.nested {
+  margin: 0;
+  padding-inline-start: 1rem;
+  border-inline-start: 3px solid var(--pico-muted-border-color);
+}
+
+/* 狀態標籤：以文字傳達，顏色僅輔助 */
+.badge {
+  display: inline-block;
+  padding: 0 0.5rem;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.badge-ok {
+  color: var(--ok);
+}
+.badge-warn {
+  color: var(--warn);
+}
+.badge-ok::before {
+  content: "✓ " / "";
+}
+.badge-warn::before {
+  content: "! " / "";
+}
+
+details.meeting {
+  margin-block-end: 1rem;
+}
+details.meeting > summary {
+  min-block-size: var(--target-size);
+  cursor: pointer;
+}
+details.meeting > section {
+  margin-block-end: 1rem;
+}
+details.meeting h3 {
+  margin-block: 0.5rem;
+  font-size: 1.125rem;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+.table-scroll table {
+  inline-size: 100%;
+  margin: 0;
+}
+caption {
+  padding-block-end: 0.5rem;
+  color: var(--pico-muted-color);
+  text-align: start;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.5rem 1rem;
+  margin-block-end: 1rem;
+}
+.toolbar .field {
+  flex: 1 1 18rem;
+}
+.toolbar input,
+.toolbar button {
+  min-block-size: var(--target-size);
+  margin: 0;
+}
+.toolbar .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.toolbar button {
+  inline-size: auto;
+  white-space: nowrap;
+}
+
+.drive-frame {
+  inline-size: 100%;
+  max-inline-size: 50rem;
+  block-size: 20rem;
+  border: 1px solid var(--pico-muted-border-color);
+  background: var(--pico-card-background-color);
+}

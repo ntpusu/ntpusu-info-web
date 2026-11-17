@@ -1,0 +1,129 @@
+---
+import "@anyblades/blades";
+import "../styles/theme.css";
+import "../styles/global.css";
+import Breadcrumb from "../components/Breadcrumb.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import { PAGES, SITE, absoluteUrl, getPage, href } from "../lib/site";
+import { buildJsonLd, serializeJsonLd } from "../lib/jsonld";
+
+interface Props {
+  /** 在 src/lib/site.ts 的 PAGES 登記的路徑，例如 "/stureps/" */
+  path: string;
+}
+
+const { path } = Astro.props;
+const page = getPage(path);
+const isHome = path === "/";
+const fullTitle = isHome
+  ? `${SITE.orgName} ${SITE.name}`
+  : `${page.title} — ${SITE.orgName} ${SITE.name}`;
+const jsonLd = buildJsonLd(path);
+const navPages = PAGES.filter((p) => p.path !== "/sitemap/");
+---
+
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={page.description} />
+    {
+      page.indexable ? (
+        <link rel="canonical" href={absoluteUrl(path)} />
+      ) : (
+        <meta name="robots" content="noindex, noarchive, nosnippet" />
+      )
+    }
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_TW" />
+    <meta property="og:site_name" content={`${SITE.orgName} ${SITE.name}`} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={page.description} />
+    {page.indexable && <meta property="og:url" content={absoluteUrl(path)} />}
+    <meta name="twitter:card" content="summary" />
+
+    <link rel="icon" href={SITE.icon} type="image/x-icon" />
+    <link rel="apple-touch-icon" href={SITE.icon} />
+    {page.indexable && <link rel="sitemap" href={href("/sitemap-index.xml")} />}
+
+    <script is:inline>
+      // 在繪製前同步決定主題，避免亮暗模式切換時閃爍（FOUC）。
+      // 一律明確寫入 data-theme，之後 CSS 只需看這個屬性。
+      (function () {
+        var theme = null;
+        try {
+          theme = localStorage.getItem("theme");
+        } catch (e) {}
+        if (theme !== "light" && theme !== "dark") {
+          theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+
+    {
+      jsonLd && (
+        <script type="application/ld+json" set:html={serializeJsonLd(jsonLd)} />
+      )
+    }
+  </head>
+  <body>
+    <a class="skip-link" href="#C">跳到主要內容</a>
+
+    <header class="container site-header">
+      <div class="header-bar">
+        <a class="landmark" id="U" href="#U" accesskey="U" title="上方功能區塊">:::</a>
+        <nav aria-label="主要導覽" class="site-nav">
+          <ul>
+            <li>
+              <a class="brand" href={href("/")} aria-current={isHome ? "page" : undefined}>
+                <strong>{SITE.orgName}</strong> {SITE.name}
+              </a>
+            </li>
+          </ul>
+          <ul>
+            {
+              navPages
+                .filter((p) => p.path !== "/")
+                .map((p) => (
+                  <li>
+                    <a href={href(p.path)} aria-current={p.path === path ? "page" : undefined}>
+                      {p.title}
+                    </a>
+                  </li>
+                ))
+            }
+            <li>
+              <a href={SITE.orgUrl}>回會網</a>
+            </li>
+            <li>
+              <ThemeToggle />
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <Breadcrumb path={path} />
+    </header>
+
+    <main class="container">
+      <a class="landmark" id="C" href="#C" accesskey="C" title="主要內容區塊">:::</a>
+      <slot />
+    </main>
+
+    <footer class="container site-footer">
+      <a class="landmark" id="B" href="#B" accesskey="B" title="下方功能區塊">:::</a>
+      <nav aria-label="頁尾導覽">
+        <ul>
+          <li><a href={href("/sitemap/")}>網站導覽</a></li>
+          <li><a href={SITE.orgUrl}>回會網</a></li>
+          <li><a href={SITE.repoUrl}>Open Source（GitHub）</a></li>
+        </ul>
+      </nav>
+      <p>{SITE.orgName}總會秘書處建置，資料來源：本會各單位。</p>
+    </footer>
+  </body>
+</html>
