@@ -15,9 +15,7 @@ interface Props {
 const { path } = Astro.props;
 const page = getPage(path);
 const isHome = path === "/";
-const fullTitle = isHome
-  ? `${SITE.orgName} ${SITE.name}`
-  : `${page.title} — ${SITE.orgName} ${SITE.name}`;
+const fullTitle = isHome ? SITE.name : `${page.title} — ${SITE.name}`;
 const jsonLd = buildJsonLd(path);
 const navPages = PAGES.filter((p) => p.path !== "/sitemap/");
 ---
@@ -40,7 +38,7 @@ const navPages = PAGES.filter((p) => p.path !== "/sitemap/");
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="zh_TW" />
-    <meta property="og:site_name" content={`${SITE.orgName} ${SITE.name}`} />
+    <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={page.description} />
     {page.indexable && <meta property="og:url" content={absoluteUrl(path)} />}
@@ -81,7 +79,7 @@ const navPages = PAGES.filter((p) => p.path !== "/sitemap/");
           <ul>
             <li>
               <a class="brand" href={href("/")} aria-current={isHome ? "page" : undefined}>
-                <strong>{SITE.orgName}</strong> {SITE.name}
+                <strong>{SITE.name}</strong>
               </a>
             </li>
           </ul>

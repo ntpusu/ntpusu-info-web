@@ -2,9 +2,9 @@
 // 避免各處各寫一份而日久漂移。
 
 export const SITE = {
-  /** 網站名稱 */
-  name: "資訊公開專區",
-  /** 組織名稱 */
+  /** 網站名稱（頁首、<title>、結構化資料共用） */
+  name: "北大學生會公開資訊",
+  /** 組織正式名稱（Organization 結構化資料、頁尾使用） */
   orgName: "國立臺北大學學生自治會",
   origin: "https://ntpusu.github.io",
   base: "/ntpusu-info-web",
@@ -29,7 +29,7 @@ export const PAGES: readonly PageInfo[] = [
     path: "/",
     title: "首頁",
     description:
-      "臺北大學學生會的資訊公開專區，公開學生代表名冊與各單位正式文件。",
+      "北大學生會公開資訊，公開學生代表名冊與各單位正式文件。",
     indexable: true,
     schemaType: "WebPage",
   },
@@ -51,7 +51,7 @@ export const PAGES: readonly PageInfo[] = [
   {
     path: "/sitemap/",
     title: "網站導覽",
-    description: "資訊公開專區的所有頁面、區塊代號與快速鍵說明。",
+    description: "本站所有頁面、區塊代號與快速鍵說明。",
     indexable: true,
     schemaType: "WebPage",
   },

@@ -1,6 +1,6 @@
-# 臺北大學學生會 資訊公開專區
+# 北大學生會公開資訊
 
-[本會網站](https://ntpusu.ntpu.edu.tw)已遷至 RPage，若干資料受限於該平台的彈性，無法以簡便的方式維護，因此另建資訊公開專區網站呈現該等資料，網址為 https://ntpusu.github.io/ntpusu-info-web/ 。
+[本會網站](https://ntpusu.ntpu.edu.tw)已遷至 RPage，若干資料受限於該平台的彈性，無法以簡便的方式維護，因此另建「北大學生會公開資訊」網站呈現該等資料，網址為 https://ntpusu.github.io/ntpusu-info-web/ 。
 
 ## 提供資料
 
