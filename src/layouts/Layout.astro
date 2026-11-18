@@ -84,6 +84,14 @@ const navPages = PAGES.filter((p) => p.path !== "/sitemap/");
             </li>
           </ul>
           <ul>
+            <li>
+              <a
+                href={href("/sitemap/")}
+                aria-current={path === "/sitemap/" ? "page" : undefined}
+              >
+                網站導覽
+              </a>
+            </li>
             {
               navPages
                 .filter((p) => p.path !== "/")
@@ -116,7 +124,6 @@ const navPages = PAGES.filter((p) => p.path !== "/sitemap/");
       <a class="landmark" id="B" href="#B" accesskey="B" title="下方功能區塊">:::</a>
       <nav aria-label="頁尾導覽">
         <ul>
-          <li><a href={href("/sitemap/")}>網站導覽</a></li>
           <li><a href={SITE.orgUrl}>回會網</a></li>
           <li><a href={SITE.repoUrl}>在 GitHub 上查看原始碼</a></li>
         </ul>
