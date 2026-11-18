@@ -3,7 +3,7 @@
 // 沒有 JavaScript 時整顆按鈕隱藏，頁面改依系統偏好顯示。
 ---
 
-<button id="theme-toggle" class="outline" type="button" aria-pressed="false" hidden>
+<button class="theme-toggle outline" type="button" aria-pressed="false" hidden>
   <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
     <path
       fill="none"
@@ -20,25 +20,27 @@
 </button>
 
 <script>
-  const btn = document.getElementById("theme-toggle") as HTMLButtonElement;
+  // 寬螢幕的導覽列與窄螢幕的選單各有一顆，兩顆狀態一起同步
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".theme-toggle");
   const root = document.documentElement;
   const isDark = () => root.getAttribute("data-theme") === "dark";
 
   function sync() {
-    btn.setAttribute("aria-pressed", String(isDark()));
+    for (const btn of buttons) btn.setAttribute("aria-pressed", String(isDark()));
   }
 
-  btn.hidden = false;
+  for (const btn of buttons) {
+    btn.hidden = false;
+    btn.addEventListener("click", () => {
+      const next = isDark() ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem("theme", next);
+      } catch {}
+      sync();
+    });
+  }
   sync();
-
-  btn.addEventListener("click", () => {
-    const next = isDark() ? "light" : "dark";
-    root.setAttribute("data-theme", next);
-    try {
-      localStorage.setItem("theme", next);
-    } catch {}
-    sync();
-  });
 
   // 使用者未手動選擇時，跟隨系統偏好的即時變化
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {

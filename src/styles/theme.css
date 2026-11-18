@@ -103,6 +103,12 @@
   /* ---- 焦點外框（WCAG 2.4.13：≥ 2 CSS px、對比 ≥ 3:1） ---- */
   --focus-ring: light-dark(var(--brown-950), var(--brown-50));
 
+  /* ---- dropdown 選單（Blades details.dropdown；邊框為非文字元件，需 ≥ 3:1） ---- */
+  --pico-dropdown-background-color: var(--pico-card-background-color);
+  --pico-dropdown-border-color: var(--pico-form-element-border-color);
+  --pico-dropdown-color: var(--pico-color);
+  --pico-dropdown-hover-background-color: light-dark(var(--brown-100), var(--brown-800));
+
   /* ---- 字體與間距 ---- */
   --pico-font-family:
     system-ui, -apple-system, "Segoe UI", "Noto Sans TC", "PingFang TC",

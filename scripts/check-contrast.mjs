@@ -77,6 +77,14 @@ checks.push(
   ["--pico-form-element-border-color", "--pico-background-color", NON_TEXT],
   ["--focus-ring", "--pico-background-color", NON_TEXT],
   ["--focus-ring", "--pico-card-background-color", NON_TEXT],
+  // dropdown 選單：背景同卡片底色；hover 底色只放 --pico-dropdown-color 的文字，
+  // 不納入 surfaces（深色模式 800 底色放次要文字會 < 7:1）
+  ["--pico-dropdown-color", "--pico-dropdown-background-color", AAA],
+  ["--pico-dropdown-color", "--pico-dropdown-hover-background-color", AAA],
+  ["--pico-dropdown-border-color", "--pico-background-color", NON_TEXT],
+  ["--pico-dropdown-border-color", "--pico-dropdown-background-color", NON_TEXT],
+  ["--focus-ring", "--pico-dropdown-background-color", NON_TEXT],
+  ["--focus-ring", "--pico-dropdown-hover-background-color", NON_TEXT],
 );
 
 let failed = 0;

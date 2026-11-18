@@ -87,7 +87,7 @@ a.landmark:hover {
 }
 .header-bar {
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* 窄螢幕導覽換行時，:::  仍與網站名稱同列 */
   gap: 0.5rem;
 }
 .site-nav {
@@ -129,7 +129,104 @@ a.landmark:hover {
   padding-inline-start: 0;
 }
 
-#theme-toggle {
+.site-nav .nav-items {
+  margin-inline-start: auto;
+}
+@media (max-width: 63.99rem) {
+  /* 窄螢幕若換行：網站導覽靠左、選單靠右，各自維持 44px 點擊範圍 */
+  .site-nav .nav-items {
+    flex: 1 1 auto;
+    justify-content: space-between;
+  }
+}
+
+/* 寬螢幕（≥ 64rem）直接列出連結；窄螢幕收進 dropdown。
+   兩組都在 DOM 中，但 display: none 的那組不會被輔助科技讀到，也不會被 Tab 聚焦。 */
+.site-nav .nav-wide {
+  display: none;
+}
+@media (min-width: 64rem) {
+  .site-nav .nav-wide {
+    display: block;
+  }
+  .site-nav .nav-narrow {
+    display: none;
+  }
+}
+
+/* ---------- dropdown 選單（Blades details.dropdown） ---------- */
+.site-nav details.nav-dropdown {
+  margin: 0;
+}
+.site-nav details.nav-dropdown > summary:not([role]) {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  block-size: auto;
+  min-block-size: var(--target-size);
+  margin: 0;
+  padding: 0 0.75rem;
+  color: var(--pico-color);
+  font-weight: 700;
+}
+/* 以 currentColor 自繪箭頭，亮暗模式都維持足夠對比 */
+.site-nav details.nav-dropdown > summary::after {
+  float: none;
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  margin: 0 0.25rem 0.25rem 0;
+  border-inline-end: 2px solid currentColor;
+  border-block-end: 2px solid currentColor;
+  background: none;
+  transform: rotate(45deg);
+}
+.site-nav details.nav-dropdown[open] > summary::after {
+  margin: 0.25rem 0.25rem 0 0;
+  transform: rotate(-135deg);
+}
+.site-nav details.nav-dropdown > summary:not([role]):focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+.site-nav details.nav-dropdown > summary + ul {
+  inset-inline: auto;
+  left: auto;
+  right: 0;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  inline-size: max-content;
+  min-inline-size: 12rem;
+  max-inline-size: calc(100vw - 2rem);
+}
+.site-nav details.nav-dropdown > summary + ul li {
+  padding: 0;
+}
+.site-nav details.nav-dropdown > summary + ul li:first-of-type,
+.site-nav details.nav-dropdown > summary + ul li:last-of-type {
+  margin: 0;
+}
+.site-nav details.nav-dropdown > summary + ul li a {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--target-size);
+  margin: 0;
+  padding-inline: 1rem;
+  text-decoration: underline; /* 1.4.1：連結不只靠顏色辨識 */
+}
+.site-nav details.nav-dropdown > summary + ul li a[aria-current="page"] {
+  font-weight: 700;
+}
+.site-nav details.nav-dropdown > summary + ul .theme-toggle {
+  inline-size: 100%;
+  margin: 0;
+  padding-inline: 1rem;
+  border-width: 0;
+  border-block-start: 1px solid var(--pico-dropdown-border-color);
+  border-radius: 0;
+}
+
+.theme-toggle {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -138,15 +235,15 @@ a.landmark:hover {
   padding: 0 0.75rem;
   white-space: nowrap;
 }
-#theme-toggle[hidden] {
+.theme-toggle[hidden] {
   display: none;
 }
-#theme-toggle .icon-sun,
-#theme-toggle .icon-moon {
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
   display: none;
 }
-[data-theme="dark"] #theme-toggle .icon-sun,
-[data-theme="light"] #theme-toggle .icon-moon {
+[data-theme="dark"] .theme-toggle .icon-sun,
+[data-theme="light"] .theme-toggle .icon-moon {
   display: inline;
 }
 

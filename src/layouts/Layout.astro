@@ -17,7 +17,15 @@ const page = getPage(path);
 const isHome = path === "/";
 const fullTitle = isHome ? SITE.name : `${page.title} — ${SITE.name}`;
 const jsonLd = buildJsonLd(path);
-const navPages = PAGES.filter((p) => p.path !== "/sitemap/");
+// 網站導覽固定顯示在頁首；其餘連結在寬螢幕直接列出，窄螢幕收進 dropdown。
+const menuLinks = [
+  ...PAGES.filter((p) => p.path !== "/" && p.path !== "/sitemap/").map((p) => ({
+    label: p.title,
+    href: href(p.path),
+    current: p.path === path,
+  })),
+  { label: "回會網", href: SITE.orgUrl, current: false },
+];
 ---
 
 <!doctype html>
@@ -83,7 +91,7 @@ const navPages = PAGES.filter((p) => p.path !== "/sitemap/");
               </a>
             </li>
           </ul>
-          <ul>
+          <ul class="nav-items">
             <li>
               <a
                 href={href("/sitemap/")}
@@ -93,21 +101,35 @@ const navPages = PAGES.filter((p) => p.path !== "/sitemap/");
               </a>
             </li>
             {
-              navPages
-                .filter((p) => p.path !== "/")
-                .map((p) => (
-                  <li>
-                    <a href={href(p.path)} aria-current={p.path === path ? "page" : undefined}>
-                      {p.title}
-                    </a>
-                  </li>
-                ))
+              menuLinks.map((l) => (
+                <li class="nav-wide">
+                  <a href={l.href} aria-current={l.current ? "page" : undefined}>
+                    {l.label}
+                  </a>
+                </li>
+              ))
             }
-            <li>
-              <a href={SITE.orgUrl}>回會網</a>
-            </li>
-            <li>
+            <li class="nav-wide">
               <ThemeToggle />
+            </li>
+            <li class="nav-narrow">
+              <details class="dropdown nav-dropdown">
+                <summary>選單</summary>
+                <ul>
+                  {
+                    menuLinks.map((l) => (
+                      <li>
+                        <a href={l.href} aria-current={l.current ? "page" : undefined}>
+                          {l.label}
+                        </a>
+                      </li>
+                    ))
+                  }
+                  <li>
+                    <ThemeToggle />
+                  </li>
+                </ul>
+              </details>
             </li>
           </ul>
         </nav>
@@ -130,5 +152,20 @@ const navPages = PAGES.filter((p) => p.path !== "/sitemap/");
       </nav>
       <p>{SITE.orgName}建置，資料來源：兩校區學生會。</p>
     </footer>
+
+    <script>
+      // dropdown 選單：原生 details 不支援 Esc 與離開焦點時關閉，這裡補上，
+      // 並在 Esc 關閉後把焦點還給「選單」按鈕。
+      const menu = document.querySelector<HTMLDetailsElement>("details.nav-dropdown");
+      menu?.addEventListener("keydown", (e) => {
+        if (e.key !== "Escape" || !menu.open) return;
+        menu.open = false;
+        menu.querySelector("summary")?.focus();
+      });
+      menu?.addEventListener("focusout", (e) => {
+        const next = e.relatedTarget as Node | null;
+        if (next && !menu.contains(next)) menu.open = false;
+      });
+    </script>
   </body>
 </html>
