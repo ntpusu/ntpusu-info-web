@@ -4,6 +4,7 @@
 import {
   DATA_URL,
   buildMeetingsWithReps,
+  describeSeats,
   formatDate,
   matchesQuery,
   safeHttpUrl,
@@ -92,11 +93,14 @@ function badge(meeting: MeetingWithReps): Node | null {
   const s = seatStatus(meeting);
   switch (s.kind) {
     case "none-required":
+    case "unknown":
       return null;
     case "complete":
       return h("span", { class: "badge badge-ok" }, `已有 ${s.count} 席資料`);
     case "partial":
       return h("span", { class: "badge badge-warn" }, `僅有 ${s.count} 席資料`);
+    case "over":
+      return h("span", { class: "badge badge-warn" }, `資料有 ${s.count} 席，多於法定席次`);
     case "empty":
       return h("span", { class: "badge badge-warn" }, "無推派資料");
   }
@@ -121,7 +125,7 @@ function renderCampus(
 function renderMeeting(meeting: MeetingWithReps): HTMLElement {
   const details = h("details", { class: "meeting" });
 
-  const seatText = meeting.totalSeats ? `法定 ${meeting.totalSeats} 席` : null;
+  const seatText = describeSeats(meeting.totalSeats);
   const summary = h("summary", {}, h("strong", {}, meeting.name));
   if (seatText) {
     summary.append(" ", h("span", { class: "muted" }, `（${seatText}）`));

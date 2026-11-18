@@ -59,19 +59,49 @@ export function buildMeetingsWithReps(data: RepresentativesData): MeetingWithRep
   }));
 }
 
+/**
+ * 法定席次。資料端的 totalSeats 是自由文字：多數為純數字（"2"），
+ * 少數為「至少1」這類寫法，所以不能直接 Number()。
+ */
+export interface SeatQuota {
+  /** exact：恰好 n 席；min：至少 n 席 */
+  mode: "exact" | "min";
+  n: number;
+}
+
+/** 解析不出來（例如「視需要」）時回傳 null，呼叫端不應據此發出警告 */
+export function parseSeatQuota(value: number | string | undefined): SeatQuota | null {
+  const m = /^(至少)?\s*(\d+)\s*[名席人]?$/.exec(String(value ?? "").trim());
+  return m ? { mode: m[1] ? "min" : "exact", n: Number(m[2]) } : null;
+}
+
+/** 摘要用的法定席次文字；沒有席次資訊時回傳 null */
+export function describeSeats(value: number | string | undefined): string | null {
+  if (!value) return null;
+  const quota = parseSeatQuota(value);
+  if (!quota) return `法定 ${value}`;
+  return quota.mode === "min" ? `法定至少 ${quota.n} 席` : `法定 ${quota.n} 席`;
+}
+
 export type SeatStatus =
   | { kind: "none-required" }
+  /** 法定席次格式無法解析，只顯示原文，不比對 */
+  | { kind: "unknown"; count: number }
   | { kind: "complete"; count: number }
   | { kind: "partial"; count: number }
+  /** 資料筆數多於法定席次（僅 exact 會發生） */
+  | { kind: "over"; count: number }
   | { kind: "empty" };
 
 export function seatStatus(meeting: MeetingWithReps): SeatStatus {
   if (!meeting.totalSeats) return { kind: "none-required" };
-  const total = Number(meeting.totalSeats);
   const count = meeting.assignedReps.length;
-  if (count > 0 && count === total) return { kind: "complete", count };
-  if (count > 0) return { kind: "partial", count };
-  return { kind: "empty" };
+  const quota = parseSeatQuota(meeting.totalSeats);
+  if (!quota) return { kind: "unknown", count };
+  if (count === 0) return { kind: "empty" };
+  if (count < quota.n) return { kind: "partial", count };
+  if (quota.mode === "exact" && count > quota.n) return { kind: "over", count };
+  return { kind: "complete", count };
 }
 
 /** 只接受 http(s) 網址，避免資料內出現 javascript: 等協定 */
