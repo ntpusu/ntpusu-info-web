@@ -12,16 +12,18 @@ const current = getPage(path);
 {
   path !== "/" && (
     <nav aria-label="麵包屑" class="breadcrumb">
-      <ol>
-        <li>
-          <a href={href(home.path)}>{home.title}</a>
-        </li>
-        <li>
-          <a href={href(current.path)} aria-current="page">
-            {current.title}
-          </a>
-        </li>
-      </ol>
+      <div class="container">
+        <ol>
+          <li>
+            <a href={href(home.path)}>{home.title}</a>
+          </li>
+          <li>
+            <a href={href(current.path)} aria-current="page">
+              {current.title}
+            </a>
+          </li>
+        </ol>
+      </div>
     </nav>
   )
 }

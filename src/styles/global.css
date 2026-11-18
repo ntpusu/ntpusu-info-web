@@ -82,8 +82,8 @@ a.landmark:hover {
 }
 
 /* ---------- 頁首與導覽 ---------- */
-.site-header {
-  padding-block: 0.5rem 0;
+.site-header > .header-bar {
+  padding-block-start: 0.5rem;
 }
 .header-bar {
   display: flex;
@@ -248,6 +248,20 @@ a.landmark:hover {
 }
 
 /* ---------- 麵包屑 ---------- */
+/* 獨立底色的橫條，與頁首、內容區分；底色上的文字一律用 --pico-color，
+   次要文字色（800／200）放在這個底色上會低於 7:1 */
+.breadcrumb {
+  margin-block-start: 0.5rem;
+  background-color: var(--breadcrumb-background);
+  border-block: 1px solid var(--pico-muted-border-color);
+  color: var(--pico-color);
+}
+.breadcrumb a {
+  color: var(--breadcrumb-color);
+}
+.breadcrumb a:hover {
+  color: var(--pico-primary-hover);
+}
 .breadcrumb ol {
   display: flex;
   flex-wrap: wrap;
@@ -263,13 +277,16 @@ a.landmark:hover {
 }
 .breadcrumb li + li::before {
   content: "/" / "";
-  color: var(--pico-muted-color);
+  color: var(--pico-color);
 }
 .breadcrumb a {
   padding-inline: 0.5rem;
 }
 .breadcrumb li:first-child a {
   padding-inline-start: 0;
+}
+.breadcrumb a[aria-current="page"] {
+  font-weight: 700;
 }
 
 /* ---------- 頁尾 ---------- */

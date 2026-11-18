@@ -103,6 +103,11 @@
   /* ---- 焦點外框（WCAG 2.4.13：≥ 2 CSS px、對比 ≥ 3:1） ---- */
   --focus-ring: light-dark(var(--brown-950), var(--brown-50));
 
+  /* ---- 麵包屑橫條：亮色 brown-200、暗色 brown-800，與頁面底色（50／950）明顯不同 ---- */
+  --breadcrumb-background: light-dark(var(--brown-200), var(--brown-800));
+  /* 連結元素會在自己身上重新定義 --pico-color，所以文字色另取一個名字 */
+  --breadcrumb-color: var(--pico-color);
+
   /* ---- dropdown 選單（Blades details.dropdown；邊框為非文字元件，需 ≥ 3:1） ---- */
   --pico-dropdown-background-color: var(--pico-card-background-color);
   --pico-dropdown-border-color: var(--pico-form-element-border-color);
